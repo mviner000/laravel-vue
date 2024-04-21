@@ -7,7 +7,6 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Tag from 'primevue/tag';
 import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
 import Dropdown from 'primevue/dropdown';

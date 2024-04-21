@@ -5,6 +5,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -22,6 +26,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/viewtable', function () {
         return Inertia::render('ViewTable'); // Assuming you have a Vue component named ViewTable
     })->name('viewtable');
+
+    Route::get('/dashboard/viewproduct', function () {
+        return Inertia::render('ViewProduct'); // Assuming you have a Vue component named ViewTable
+    })->name('viewproduct');
 
     Route::get('/dashboard/addtable', function () {
         return Inertia::render('AddTable'); // Assuming you have a Vue component named AddTable
