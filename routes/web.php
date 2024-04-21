@@ -14,9 +14,19 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get('/dashboard/viewtable', function () {
+        return Inertia::render('ViewTable'); // Assuming you have a Vue component named ViewTable
+    })->name('viewtable');
+
+    Route::get('/dashboard/addtable', function () {
+        return Inertia::render('AddTable'); // Assuming you have a Vue component named AddTable
+    })->name('addtable');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
