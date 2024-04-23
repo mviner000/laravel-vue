@@ -1,9 +1,23 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Livewire\Product\ListProduct;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+// Add your custom registration route
+Route::get('/home', function () {
+    return view('home-page');
+})->name('home');
+
+Route::prefix('product')->group(function(){
+    Route::get('/', function () {
+        return view('product-page');
+    })->name('product');
+});
+
+// Route::get('/products', ListProduct::class);
 
 Route::get('/user', function (Request $request) {
     return $request->user();

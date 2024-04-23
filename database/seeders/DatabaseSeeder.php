@@ -9,6 +9,7 @@ use App\Models\Supplier;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -56,63 +57,9 @@ class DatabaseSeeder extends Seeder
         ProductCategory::factory(10)->create();
 
         Product::create([
-            'id' => '4b968f24-2b9d-4a9e-9c61-21fe9bf6cb20',
+            'id' => Str::random(5),
             'name' => 'Product 1',
             'description' => 'Description for Product 1',
-        ]);
-        
-        Product::create([
-            'id' => 'c8a8649e-4227-4db5-ba5f-d796426b40e4',
-            'name' => 'Product 2',
-            'description' => 'Description for Product 2',
-        ]);
-        
-        Product::create([
-            'id' => '3c3169a3-ae9d-45b5-815d-3c7a5e46e487',
-            'name' => 'Product 3',
-            'description' => 'Description for Product 3',
-        ]);
-        
-        Product::create([
-            'id' => '7fd6f77b-f8a6-4f7c-8f54-ff87177cb08a',
-            'name' => 'Product 4',
-            'description' => 'Description for Product 4',
-        ]);
-        
-        Product::create([
-            'id' => '72275595-7017-4b28-91cc-c70e22b7f636',
-            'name' => 'Product 5',
-            'description' => 'Description for Product 5',
-        ]);
-        
-        Product::create([
-            'id' => 'a41aa2d5-83c5-4e63-91c3-9f1414bfb3e3',
-            'name' => 'Product 6',
-            'description' => 'Description for Product 6',
-        ]);
-        
-        Product::create([
-            'id' => '30d00e4e-606e-45de-bd77-77ff0e70e333',
-            'name' => 'Product 7',
-            'description' => 'Description for Product 7',
-        ]);
-        
-        Product::create([
-            'id' => 'd7088934-f540-4b20-9b59-8103676dc34c',
-            'name' => 'Product 8',
-            'description' => 'Description for Product 8',
-        ]);
-        
-        Product::create([
-            'id' => 'cb743365-47a2-42b1-80f6-f0a0d6fe0276',
-            'name' => 'Product 9',
-            'description' => 'Description for Product 9',
-        ]);
-        
-        Product::create([
-            'id' => 'f6669b6b-4b44-4f2a-a660-5b3dc1918f49',
-            'name' => 'Product 10',
-            'description' => 'Description for Product 10',
         ]);
 
         Supplier::factory(10)->create();

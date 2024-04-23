@@ -1,6 +1,7 @@
 <template>
     <div class="card">
       <DataTable :value="products" tableStyle="min-width: 50rem">
+        <Column field="id" header="ID"></Column>
         <Column field="name" header="Name"></Column>
         <Column field="selling_price" header="Selling Price"></Column>
         <Column field="grocery_price" header="Grocery Price"></Column>

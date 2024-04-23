@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -12,6 +13,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'description',
+        'image',
         'price',
         'barcode',
         'quantity',
@@ -22,6 +24,23 @@ class Product extends Model
         'created_by',
         'updated_by',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Generate a UUID automatically when creating a new product and limit it to 6 characters
+        static::creating(function ($product) {
+            $uuid = Str::uuid();
+            $product->id = substr($uuid, 0, 6); // Limit to the first 6 characters
+        });
+    }
+
+    // Accessor to return the first 5 characters of the UUID
+    public function getIdAttribute($value)
+    {
+        return substr($value, 0, 6);
+    }
 
     public function category()
     {

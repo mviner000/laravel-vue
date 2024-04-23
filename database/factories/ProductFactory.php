@@ -17,7 +17,6 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'id' => Str::uuid(),
             'name' => $this->faker->word,
             'description' => $this->faker->sentence,
             'grocery_price' => $this->faker->randomFloat(2, 0, 1000),
