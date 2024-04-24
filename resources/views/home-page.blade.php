@@ -15,6 +15,7 @@ Home
 @endphp
 
 <div class="container">
+    <button id="upload_widget" class="cloudinary-button">Upload files</button>
     <div class="row">
         @foreach ($images['resources'] as $image)
         <div class="col-md-4 mb-3">
@@ -32,7 +33,20 @@ Home
 </div>
 
 
+<script type="text/javascript">  
+var myWidget = cloudinary.createUploadWidget({
+    cloudName: 'dqpzvvd0v', 
+    uploadPreset: 'mrpfvufw'}, (error, result) => { 
+    if (!error && result && result.event === "success") { 
+        console.log('Done! Here is the image info: ', result.info); 
+    }
+    }
+)
 
+    document.getElementById("upload_widget").addEventListener("click", function(){
+    myWidget.open();
+    }, false);
+</script>
 
 
 

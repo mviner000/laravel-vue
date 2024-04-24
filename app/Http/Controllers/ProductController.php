@@ -27,43 +27,44 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(ProductStoreRequest $request)
-{
-    try {
-        // Check if an image is uploaded
-        if ($request->hasFile('image_url')) {
-            // Upload image to Cloudinary
-            $cloudinaryImage = $request->file('image_url')->storeOnCloudinary('products');
-            $url = $cloudinaryImage->getSecurePath();
-            $publicId = $cloudinaryImage->getPublicId();
-        } else {
-            // Assign default placeholder image URL from placeholder.com
-            $url = 'https://picsum.photos/200/300'; // Change dimensions as needed
-            $publicId = null; // No need for public ID if using a default placeholder image
+    {
+        try {
+            // Check if an image is uploaded
+            if ($request->hasFile('image')) {
+                // Upload image to Cloudinary
+                $cloudinaryImage = $request->file('image')->storeOnCloudinary('products');
+                $url = $cloudinaryImage->getSecurePath();
+                $publicId = $cloudinaryImage->getPublicId();
+            } else {
+                // Assign default placeholder image URL from placeholder.com
+                $url = 'https://picsum.photos/200/300'; // Change dimensions as needed
+                $publicId = null; // No need for public ID if using a default placeholder image
+            }
+
+            // Create the product with the validated data and image details
+            Product::create([
+                'name' => $request->name,
+                'barcode' => $request->barcode,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+                'selling_price' => $request->selling_price,
+                'grocery_price' => $request->grocery_price,
+                'image_url' => $url,
+                'image_public_id' => $publicId,
+            ]);
+
+            // Return JSON response
+            return response()->json([
+                'message' => "Product successfully created."
+            ], 200);
+        } catch (\Exception $e) {
+            // Return JSON response with error message
+            return response()->json([
+                'message' => "Something went wrong: " . $e->getMessage()
+            ], 500);
         }
-
-        // Create the product with the validated data and image details
-        Product::create([
-            'name' => $request->name,
-            'barcode' => $request->barcode,
-            'quantity' => $request->quantity,
-            'description' => $request->description,
-            'selling_price' => $request->selling_price,
-            'grocery_price' => $request->grocery_price,
-            'image_url' => $url,
-            'image_public_id' => $publicId,
-        ]);
-
-        // Return JSON response
-        return response()->json([
-            'message' => "Product successfully created."
-        ], 200);
-    } catch (\Exception $e) {
-        // Return JSON response with error message
-        return response()->json([
-            'message' => "Something went wrong: " . $e->getMessage()
-        ], 500);
     }
-}
+
 
 
     /**
@@ -87,6 +88,28 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            // Find the product by its ID
+            $product = Product::findOrFail($id);
+    
+            // Delete the product's image from Cloudinary if it exists
+            if ($product->image_public_id) {
+                Cloudinary::destroy($product->image_public_id);
+            }
+    
+            // Delete the product
+            $product->delete();
+    
+            // Return JSON response
+            return response()->json([
+                'message' => "Product successfully deleted."
+            ], 200);
+        } catch (\Exception $e) {
+            // Return JSON response with error message
+            return response()->json([
+                'message' => "Something went wrong: " . $e->getMessage()
+            ], 500);
+        }
     }
+    
 }

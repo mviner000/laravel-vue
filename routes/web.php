@@ -41,6 +41,10 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('ViewTable'); // Assuming you have a Vue component named ViewTable
     })->name('viewtable');
 
+    Route::get('/dashboard/upload', function () {
+        return Inertia::render('UploadCloudinary'); // Assuming you have a Vue component named ViewTable
+    })->name('upload');
+
     Route::get('/dashboard/viewproduct', function () {
         return Inertia::render('ViewProduct'); // Assuming you have a Vue component named ViewTable
     })->name('viewproduct');
