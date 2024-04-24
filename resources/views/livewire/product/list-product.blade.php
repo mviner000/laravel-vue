@@ -10,34 +10,34 @@
         <form wire:submit.prevent="createProduct">
             <div class="mb-3">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" wire:model="name">
+                <input type="text" class="form-control" id="name" wire:model.defer="name">
                 @error('name') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             
             <div class="mb-3">
                 <label for="barcode">Barcode</label>
-                <input type="text" class="form-control" id="barcode" wire:model="barcode">
+                <input type="text" class="form-control" id="barcode" wire:model.defer="barcode">
                 @error('barcode') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             
             <div class="mb-3">
                 <label for="quantity">Quantity</label>
-                <input type="number" class="form-control" id="quantity" wire:model="quantity">
+                <input type="number" class="form-control" id="quantity" wire:model.defer="quantity">
                 @error('quantity') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
-
+        
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="grocery_price" class="form-label">Grocery Price</label>
-                        <input wire:model.defer="grocery_price" type="number" class="form-control" id="grocery_price">
+                        <input type="number" class="form-control" id="grocery_price" wire:model.defer="grocery_price">
                         @error('grocery_price') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="selling_price" class="form-label">Selling Price</label>
-                        <input wire:model.defer="selling_price" type="number" class="form-control" id="selling_price">
+                        <input type="number" class="form-control" id="selling_price" wire:model.defer="selling_price">
                         @error('selling_price') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -45,20 +45,29 @@
             
             <div class="mb-3">
                 <label for="description">Description</label>
-                <textarea class="form-control" id="description" wire:model="description"></textarea>
+                <textarea class="form-control" id="description" wire:model.defer="description"></textarea>
                 @error('description') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             
             <div class="mb-3">
-                <label for="image">Image</label>
-                <!-- Disable the input while image is uploading -->
-                <input type="file" class="form-control" id="image" wire:model="image" @if($isUploading) disabled @endif>
-                @error('image') <span class="text-danger">{{ $message }}</span> @enderror
-            </div>
+                <label for="image_url">Image Upload</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="file" class="form-control" id="image_url" wire:model="image_url" wire:loading.attr="disabled">
+                        @error('image_url') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="col-md-6">
+                        @if ($image_url)
+                            <img src="{{ $image_url->temporaryUrl() }}" class="img-fluid mt-2" alt="Preview" style="max-height: 150px;">
+                        @endif
+                    </div>
+                </div>
+            </div>            
             
             <!-- Disable submit button while image is uploading -->
-            <button type="submit" class="btn btn-primary" @if($isUploading) disabled @endif>Save Product</button>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">Save Product</button>
         </form>
+        
     </div>
     
 
@@ -93,8 +102,8 @@
                                 <td>{{ $product->grocery_price ?? 'null' }}</td>
                                 <td>{{ $product->description ?? 'null' }}</td>
                                 <td>
-                                    @if($product->image)
-                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" width="100">
+                                    @if($product->image_url)
+                                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" width="100">
                                     @else
                                         null
                                     @endif

@@ -19,7 +19,7 @@ class ListProduct extends Component
     public $grocery_price;
     public $quantity;
     public $description;
-    public $image;
+    public $image_url;
     public $isUploading = false; 
 
     public function mount()
@@ -30,31 +30,30 @@ class ListProduct extends Component
     public function createProduct()
     {
         $this->quantity = 0;
-
+    
         $validatedData = $this->validate([
             'name' => 'required',
             'description' => 'nullable',
             'barcode' => 'nullable',
             'selling_price' => 'nullable|numeric|min:0',
             'grocery_price' => 'nullable|numeric|min:0',
-            'image' => 'nullable|image|max:1024', // Assuming max file size is 1MB
+            'image_url' => 'nullable|image|max:1024', // Assuming max file size is 1MB
         ], [
             'name.required' => 'The name field is required.',
-            'image.image' => 'The image must be an image file.',
-            'image.max' => 'The image size must be less than 1MB.',
+            'image_url.image' => 'The image must be an image file.',
+            'image_url.max' => 'The image size must be less than 1MB.',
             'selling_price.numeric' => 'The selling price must be a number.',
             'selling_price.min' => 'The selling price must be at least 0.',
             'grocery_price.numeric' => 'The grocery price must be a number.',
             'grocery_price.min' => 'The grocery price must be at least 0.',
         ]);
-
-        // Generate a unique filename for the image
-        $imageName = md5(uniqid() . time()) . '.' . $this->image->getClientOriginalExtension();
-
-        // Store the uploaded image in the storage/app/public directory
-        $this->image->storeAs('public/product', $imageName);
-
-        // Create the product with the validated data and image path
+    
+        // Upload image to Cloudinary
+        $cloudinaryImage = $this->image_url->storeOnCloudinary('products');
+        $url = $cloudinaryImage->getSecurePath();
+        $publicId = $cloudinaryImage->getPublicId();
+    
+        // Create the product with the validated data and image details
         Product::create([
             'name' => $this->name,
             'barcode' => $this->barcode,
@@ -62,21 +61,21 @@ class ListProduct extends Component
             'description' => $this->description,
             'selling_price' => $this->selling_price,
             'grocery_price' => $this->grocery_price,
-            'image' => 'product/' . $imageName,
+            'image_url' => $url,
+            'image_public_id' => $publicId,
         ]);
-
+    
         $productName = $this->name; // Assuming 'name' is the field for the product name
         Session::flash('success', $productName);
-
+    
         // Reset form fields after saving
         $this->reset([
-            'name', 'barcode', 'selling_price', 'grocery_price', 'quantity', 'description', 'image', 'isUploading'
+            'name', 'barcode', 'selling_price', 'grocery_price', 'quantity', 'description', 'image_url', 'isUploading'
         ]);
-        
+    
         // Refresh the product list after creating a new product
         $this->refreshComponent();
-        
-    }
+    }    
 
     public function deleteProduct($productId)
     {
