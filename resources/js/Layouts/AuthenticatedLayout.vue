@@ -6,8 +6,6 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-
 
 const showingNavigationDropdown = ref(false);
 </script>
