@@ -61,6 +61,30 @@ onMounted(() => {
             console.log(customer.verified);
         });
     });
+    // Load Cloudinary upload widget script
+    const script = document.createElement('script');
+      script.src = 'https://upload-widget.cloudinary.com/global/all.js';
+      script.type = 'text/javascript';
+      script.async = true;
+      document.head.appendChild(script);
+      
+       // Initialize Cloudinary upload widget
+    script.onload = () => {
+        const widget = (window as any).cloudinary.createUploadWidget({
+            cloudName: 'dqpzvvd0v',
+            uploadPreset: 'mrpfvufw'
+        }, (error: any, result: any) => {
+            if (!error && result && result.event === 'success') {
+                console.log('Upload successful! Here is the result:', result.info);
+                // You can handle successful upload here
+            }
+        });
+
+        // Open Cloudinary upload widget on button click
+        document.getElementById('upload_widget')?.addEventListener('click', function () {
+            widget.open();
+        }, false);
+    };
 });
 
 const getCustomers = (data: any[]): Customer[] => {
@@ -93,6 +117,10 @@ const getSeverity = (status: string): CustomSeverity | undefined => {
 
 <template>
     <div class="card">
+        
+        <div class="flex align-center justify-center">
+        <button id="upload_widget" class="cloudinary-button">Upload files</button>
+        </div>
         <DataTable v-model:filters="filters" :value="customers" paginator :rows="10" dataKey="id" filterDisplay="row" :loading="loading"
                 :globalFilterFields="['name', 'country.name', 'representative.name', 'status']">
             <template #header>
@@ -155,7 +183,7 @@ const getSeverity = (status: string): CustomSeverity | undefined => {
             </Column>
             <Column field="verified" header="Verified" dataType="boolean" style="min-width: 6rem">
                 <template #body="{ data }">
-                    <i class="pi" :class="{ 'pi-check-circle text-green-500': data.verified, 'pi-times-circle text-red-400': !data.verified }"></i>
+                    <div>{{ data.verified ? 'true' : 'false' }}</div>
                 </template>
                 <template #filter="{ filterModel, filterCallback }">
                     <TriStateCheckbox v-model="filterModel.value" @change="filterCallback()" class="outline outline-offset-1 outline-cyan-500" style="outline-width: thin;" />
