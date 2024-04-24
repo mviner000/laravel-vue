@@ -3,14 +3,6 @@
 
 Home
 
-{{-- <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <input type="file" name="image" accept="image/*">
-    <button type="submit">Upload Image</button>
-</form> --}}
-
-
-
 @php
     // Include the Cloudinary PHP SDK
     use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;

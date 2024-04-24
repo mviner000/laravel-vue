@@ -17,6 +17,8 @@ class CreateProductsTable extends Migration
             $table->string('barcode')->unique()->nullable();
             $table->integer('quantity')->default(0);
             $table->string('cabinet')->nullable();
+            $table->string('image_url')->nullable();
+            $table->string('image_public_id')->nullable();
             $table->uuid('created_by')->nullable();
             $table->uuid('updated_by')->nullable();
             
