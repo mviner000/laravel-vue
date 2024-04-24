@@ -30,7 +30,7 @@ class ListProduct extends Component
     public function createProduct()
     {
         $this->quantity = 0;
-    
+
         $validatedData = $this->validate([
             'name' => 'required',
             'description' => 'nullable',
@@ -47,12 +47,19 @@ class ListProduct extends Component
             'grocery_price.numeric' => 'The grocery price must be a number.',
             'grocery_price.min' => 'The grocery price must be at least 0.',
         ]);
-    
-        // Upload image to Cloudinary
-        $cloudinaryImage = $this->image_url->storeOnCloudinary('products');
-        $url = $cloudinaryImage->getSecurePath();
-        $publicId = $cloudinaryImage->getPublicId();
-    
+
+        // Check if an image is uploaded
+        if ($this->image_url) {
+            // Upload image to Cloudinary
+            $cloudinaryImage = $this->image_url->storeOnCloudinary('products');
+            $url = $cloudinaryImage->getSecurePath();
+            $publicId = $cloudinaryImage->getPublicId();
+        } else {
+            // Use placeholder image URL
+            $url = 'https://picsum.photos/200/300'; // Placeholder image URL
+            $publicId = null; // No need for public ID if using a placeholder image
+        }
+
         // Create the product with the validated data and image details
         Product::create([
             'name' => $this->name,
@@ -64,18 +71,19 @@ class ListProduct extends Component
             'image_url' => $url,
             'image_public_id' => $publicId,
         ]);
-    
+
         $productName = $this->name; // Assuming 'name' is the field for the product name
         Session::flash('success', $productName);
-    
+
         // Reset form fields after saving
         $this->reset([
             'name', 'barcode', 'selling_price', 'grocery_price', 'quantity', 'description', 'image_url', 'isUploading'
         ]);
-    
+
         // Refresh the product list after creating a new product
         $this->refreshComponent();
-    }    
+    }
+
 
     public function deleteProduct($productId)
     {

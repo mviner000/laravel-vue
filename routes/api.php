@@ -16,3 +16,7 @@ Route::put('usersupdate/{id}', [UserController::class, 'update']);
 Route::delete('usersdelete/{id}', [UserController::class, 'destroy']); 
 
 Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{id}', [ProductController::class, 'show']);
+Route::post('addnewproduct', [ProductController::class, 'store']);
+Route::put('productsupdate/{id}', [ProductController::class, 'update']);
+Route::delete('productsdelete/{id}', [ProductController::class, 'destroy']); 
